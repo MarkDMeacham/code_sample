@@ -1,0 +1,29 @@
+<h1>Statements <%= content_tag :span, nil, class: "glyphicon glyphicon-plus trigger", data: {toggle: "modal", target: "#new_statement_modal"} %></h1>
+<table class="table">
+	<tbody>
+		<%= render "/statements/results" %>
+	</tbody>
+</table>
+
+<!-- Modal for creating new statement -->
+<div id="new_statement_modal" class="modal fade" role="dialog" aria-labelledby="new_statement_modal_title">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" id="new_statement_modal_title">New Statement</h4>
+			</div>
+			<div class="modal-body">
+				<%= form_for @new_statement do |f| %>
+					<div class="form-group">
+						<%= label_tag :statement_name, "Name" %>
+						<%= f.text_field :name, class: "form-control" %>
+					</div>
+				<% end %>
+			</div>
+			<div class="modal-footer">
+				<%= submit_tag :Cancel, class: "btn btn-default", type: "button", data: {dismiss: "modal"} %>
+				<%= submit_tag :Continue, class: "btn btn-primary", onclick: "$('#new_statement').submit();" %>
+			</div>
+		</div>
+	</div>
+</div>

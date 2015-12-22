@@ -1,0 +1,5 @@
+<% @statements.each do |statement| %>
+	<tr onclick="window.location.assign('<%= statement_path(statement) %>');" class="trigger">
+		<td><%= statement.name %></td>
+	</tr>
+<% end %>

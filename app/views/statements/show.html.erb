@@ -1,0 +1,49 @@
+<div class="container" id="statement_wrapper">
+	<h4 data-bind="text: name();"></h4>
+	<div data-bind="foreach: {data: lines}">
+		<div class="table" data-bind="template: line_type();"></div>
+	</div>
+	<div class="table">
+		<div class="cell"><%= text_field_tag :total, "Total", disabled: true %></div>
+		<div class="cell amount"><%= text_field_tag :total, nil, data: {bind: "value: total()"}, disabled: true %></div>
+	</div>
+</div>
+
+<script type="text/html" id="proration">
+	<div class="cell" data-bind="with: mapped_data_points['description'];"><%= input %></div>
+	<div class="cell" data-bind="with: mapped_data_points['amount'];"><%= input %></div>
+	<div class="cell" data-bind="with: mapped_data_points['start_date'];"><%= datepicker %></div>
+	<div class="cell" data-bind="with: mapped_data_points['proration_date'];"><%= datepicker %></div>
+	<div class="cell" data-bind="with: mapped_data_points['end_date'];"><%= datepicker %></div>
+	<div class="cell amount" data-bind="with: mapped_data_points['total'];"><%= input %></div>
+</script>
+<script type="text/html" id="commission">
+	<div class="cell" data-bind="with: mapped_data_points['description'];"><%= input %></div>
+	<div class="cell" data-bind="with: mapped_data_points['amount'];"><%= input %></div>
+	<div class="cell" data-bind="with: mapped_data_points['percent'];"><%= input %></div>
+	<div class="cell amount" data-bind="with: mapped_data_points['total'];"><%= input %></div>
+</script>
+<script type="text/html" id="description">
+	<div class="cell" data-bind="with: mapped_data_points['description'];"><%= input %></div>
+	<div class="cell amount" data-bind="with: mapped_data_points['total'];"><%= input %></div>
+</script>
+
+<script type="text/javascript">
+	window.statement = new window.statement_vm(<%= raw @statement.to_vm %>);
+	ko.applyBindings(statement, $("#statement_wrapper")[0]);
+
+	lines = [];
+	<% @statement.lines.each do |line| %>
+		line = new window.line_vm(<%= raw line.except(:data_points).to_json %>);
+		<% line[:data_points].each do |data_point| %>
+			data_point = new window.data_point_vm(<%= raw data_point.to_json %>);
+			line.mapped_data_points[data_point.tag()] = data_point;
+			line[data_point.tag()] = data_point.content;
+			data_point.line = line;
+			statement.mapped_data_points[data_point.uid()] = data_point;
+		<% end %>
+		lines.push(line);
+	<% end %>
+	statement.lines(lines);
+	statement.initialize();
+</script>
