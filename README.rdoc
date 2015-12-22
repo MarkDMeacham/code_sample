@@ -1,1 +1,15 @@
-This is a simple toy app that I wrote in a couple of hours.
+This is a simple toy application that I wrote in a couple of hours with no previously used code. The application allows a user to create a statement which generates three lines. Each of the lines has a variable number of data points which are used in calculating the line total. All of the line totals are added together and displayed as a final total. When users navigate back to the home page, they see the statements they have created and are able to revisit them.
+
+Statement data is stored as XML to demonstrate using Nokogiri. The statement itself is displayed in a dynamic and responsive client view model using Knockout. 
+
+Lines in the statement are displayed dynamically and based on line type.
+
+Data point content is displayed using a formatted_content extender, but maintains the original value for calculations (i.e. An amount is 50.0 while the formatted content is displayed as $50.00). Updates to the inputs of the formatted content are propagated to the content.
+
+Data points can be assigned listener functions which are calculated and assigned to the content. In the past, I have added a custom attribute which allows the user to overwrite the listener with their own value. 
+
+Updates to data points are gathered as transactions and saved in memory until the view has not been updated for 500 milliseconds. After the timer has expired, updates are sent back all at once which minimizes the number of saves required. Less writes are needed as the calculations are performed and displayed instantly.
+
+Thank you for your time,
+
+-Mark
