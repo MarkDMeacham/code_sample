@@ -9,6 +9,7 @@
 	</div>
 </div>
 
+<!-- Templates for lines. Allows for variable number of lines -->
 <script type="text/html" id="proration">
 	<div class="cell" data-bind="with: mapped_data_points['description'];"><%= input %></div>
 	<div class="cell" data-bind="with: mapped_data_points['amount'];"><%= input %></div>
@@ -29,9 +30,12 @@
 </script>
 
 <script type="text/javascript">
+	// Load the statement into the view model
 	window.statement = new window.statement_vm(<%= raw @statement.to_vm %>);
 	ko.applyBindings(statement, $("#statement_wrapper")[0]);
 
+	// Load lines into temporary array and then into view model. 
+	// Pushing directly into statement.lines would slow down the process significantly due to the observers.
 	lines = [];
 	<% @statement.lines.each do |line| %>
 		line = new window.line_vm(<%= raw line.except(:data_points).to_json %>);

@@ -8,6 +8,8 @@ class StatementsController < ApplicationController
 
 	def create
 		@statement = Statement.create statement_params
+		
+		# Go to the show action after create
 		redirect_to(@statement)
 	end
 
@@ -24,6 +26,8 @@ class StatementsController < ApplicationController
 	end
 
 	private 
+
+	# Get the requested statement or return to the index if one does not exist
 	def initialize_statement
 		@statement = Statement.find_by_id params[:id]
 		unless @statement 
@@ -33,6 +37,7 @@ class StatementsController < ApplicationController
 		end
 	end
 
+	# Filter parameters
 	def statement_params
 		params.require(:statement).permit(:name, :data_points)
 	end
